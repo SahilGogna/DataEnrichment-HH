@@ -2,27 +2,23 @@ package hadoop
 
 import java.io.File
 
+import constants.HadoopConstants
 import org.apache.hadoop.fs.Path
 
-class HadoopService extends HadoopConfiguration {
-
-  val fileList: List[String] = List("calendar_dates", "trips", "frequencies")
-  val rootFolderPath : String = "/user/fall2019/sahilgogna/stm"
-  val pathSeparator = "/"
-  val dataDirPath: String = "/Users/sahilgogna/Desktop/stm"
-  val fileExtension: String = ".txt"
+class HadoopService extends HadoopConfiguration with HadoopConstants{
 
   def putFiles(): Unit = {
-    assureExistance(rootFolderPath)
-    fileList.map(folder => createSubFolder(folder))
-    val dir : File = new File(dataDirPath)
+    println(COPYING_MESSAGE)
+    assureExistance(HADOOP_ROOT_FOLDER_PATH)
+    FILE_LIST.foreach(folder => createSubFolder(folder))
+    val dir : File = new File(DATA_DIRECTORY_PATH)
     val fileArray: Array[File] = dir.listFiles()
-    fileList.map( fileName => copyToHdfs(fileName, fileArray))
-
+    FILE_LIST.foreach( fileName => copyToHdfs(fileName, fileArray))
+    println(COPIED_MESSAGE)
   }
 
   def createSubFolder(folderName: String):Unit = {
-    val folderPath = rootFolderPath + pathSeparator + folderName
+    val folderPath = HADOOP_ROOT_FOLDER_PATH + PATH_SEPARATOR + folderName
     assureExistance(folderPath)
   }
 
@@ -35,11 +31,11 @@ class HadoopService extends HadoopConfiguration {
   }
 
   def copyToHdfs(name:String , filesArray: Array[File]):Unit = {
-    val fileName = name + fileExtension
-    val destPath = rootFolderPath + pathSeparator + name
-    val fileFound: Array[File] = filesArray.filter( file => file.getName().equals(fileName))
+    val fileName = name + FILE_EXTENSION
+    val destPath = HADOOP_ROOT_FOLDER_PATH + PATH_SEPARATOR + name
+    val fileFound: Array[File] = filesArray.filter( file => file.getName.equals(fileName))
     if(fileFound.length > 0){
-      val sourcePath: String = fileFound(0).getAbsolutePath()
+      val sourcePath: String = fileFound(0).getAbsolutePath
       fileSystem.copyFromLocalFile(new Path(sourcePath), new Path(destPath))
     }
   }

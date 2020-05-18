@@ -1,11 +1,12 @@
 package hive
 
-import java.sql.{Connection, DriverManager}
+import java.sql.{Connection, DriverManager, Statement}
 
-trait HiveClientConnection {
+import constants.HiveConstants
 
-  val driverName: String = "org.apache.hive.jdbc.HiveDriver"
-  Class.forName(driverName)
-  val connection: Connection = DriverManager.getConnection("jdbc:hive2://quickstart.cloudera:10000/sahlgogna;user=sahilgogna;password=sahilgogna")
-  val stmt = connection.createStatement()
+trait HiveClientConnection extends HiveConstants{
+
+  Class.forName(DRIVER_NAME)
+  val connection: Connection = DriverManager.getConnection(CONNECTION_URL)
+  val stmt: Statement = connection.createStatement()
 }

@@ -5,16 +5,19 @@ import java.net.{HttpURLConnection, URL}
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
-class UnzipService {
+import constants.GeneralConstants
+
+class UnzipService extends GeneralConstants{
 
   def unzipUrl(sourceUrl:String, dirPath : String) : Unit = {
+    println(DOWNLOADING_MESSAGE)
     val url = new URL(sourceUrl)
     val connection = url.openConnection.asInstanceOf[HttpURLConnection]
-    connection.setRequestMethod("GET")
+    connection.setRequestMethod(METHOD_TYPE_GET)
     val in = connection.getInputStream
     val zipIn = new ZipInputStream(in)
     val buffer = new Array[Byte](1024)
-    var zipEntry: ZipEntry = zipIn.getNextEntry()
+    var zipEntry: ZipEntry = zipIn.getNextEntry
     val directory = new File(dirPath)
     if (!directory.exists()) {
       directory.mkdir()
@@ -24,7 +27,7 @@ class UnzipService {
     }
 
     while (zipEntry != null) {
-      val newFile: File = new File(dirPath, zipEntry.getName())
+      val newFile: File = new File(dirPath, zipEntry.getName)
       val os: FileOutputStream = new FileOutputStream(newFile)
       var len: Integer = zipIn.read(buffer)
       while (len > 0) {
@@ -35,6 +38,7 @@ class UnzipService {
       zipEntry = zipIn.getNextEntry
 
     }
+    println(DOWNLOADED_MESSAGE)
     zipIn.closeEntry()
     zipIn.close()
   }
