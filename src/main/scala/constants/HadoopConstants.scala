@@ -13,7 +13,7 @@ trait HadoopConstants {
   val FILE_EXTENSION: String = ".txt"
   val FILE_LIST: List[String] = List("calendar_dates", "trips", "frequencies")
   val COPYING_MESSAGE :String = "Copying files to HDFS.."
-  val COPIED_MESSAGE : String = "Copying files to HDFS.."
+  val COPIED_MESSAGE : String = "Copied files to HDFS."
 
 
 

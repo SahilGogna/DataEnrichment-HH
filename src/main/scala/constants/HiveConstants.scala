@@ -37,9 +37,9 @@ trait HiveConstants extends HadoopConstants{
   val STRICT_MODE_QUERY : String = "SET hive.exec.dynamic.partition.mode=nonstrict"
   val ENRICH_TRIP_QUERY : String = "INSERT OVERWRITE TABLE fall2019_sahilgogna.enriched_trip\nPARTITION(wheelchair_accessible)\n"+
     "SELECT t.route_id,\nt.service_id,\nt.trip_id,\nt.trip_headsign,\nt.direction_id,\nt.shape_id,\nt.note_fr,\n"+
-    "t.note_en,\nt.wheelchair_accessible,\nf.start_time,\nf.end_time,\nf.headway_secs,\nc.calendar_date,\n"+
-    "c.exception_type\nfrom fall2019_sahilgogna.ext_trips t\nINNER JOIN fall2019_sahilgogna.ext_frequencies f"+
-    "\nINNER JOIN fall2019_sahilgogna.ext_calendar_dates c\non t.trip_id = f.trip_id and t.service_id = c.service_id"
+    "t.note_en,\nf.start_time,\nf.end_time,\nf.headway_secs,\nc.calendar_date,\n"+
+    "c.exception_type,\nt.wheelchair_accessible\nfrom fall2019_sahilgogna.ext_trips t\nLEFT JOIN fall2019_sahilgogna.ext_frequencies f"+
+    "\non t.trip_id = f.trip_id\nLEFT JOIN fall2019_sahilgogna.ext_calendar_dates c on t.service_id = c.service_id"
 
 
   val CREATE_ENRICHED_TABLE_QUERY : String = "CREATE TABLE fall2019_sahilgogna.enriched_trip(\n" +
